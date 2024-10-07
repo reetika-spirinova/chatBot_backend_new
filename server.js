@@ -1,19 +1,20 @@
 const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
-const cors = require('cors');  // Import CORS middleware
+const cors = require('cors');
+
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 const port = 3000;
+app.use(cors({
+    origin: 'https://civilbrain.ai'
+}));
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
-
-// Use CORS middleware to allow requests from your React app
-app.use(cors({ origin: 'http://localhost:3001' }));  // Change this to match your React app's origin
 
 // Hugging Face API endpoint and headers
 const HUGGING_FACE_API_URL = 'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill';
