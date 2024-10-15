@@ -31,9 +31,12 @@ const getResponseFromPDF = async (query) => {
     try {
         const pdfBuffer = fs.readFileSync('response.pdf'); // Read the PDF file
         const data = await pdfParse(pdfBuffer); // Parse the PDF
-        const text = data.text; // Extract text content from the PDF
+        let text = data.text; // Extract text content from the PDF
 
-        console.log("Extracted Text:", text); 
+        // Replace escaped characters with regular quotation marks
+        text = text.replace(/\\"/g, '"');
+
+        console.log("Extracted Text:", text);
 
         const lines = text.split('\n'); // Split the text content into lines
         let response = "Sorry, I don't understand your request."; // Default response
@@ -90,7 +93,7 @@ const getResponseFromPDF = async (query) => {
             response = bestMatch.answer;
         }
 
-        return response;
+        return response.replaceAll("\"","'");
     } catch (error) {
         console.error('Error reading PDF:', error);
         return "There was an error processing your request.";
